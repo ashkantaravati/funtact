@@ -15,7 +15,7 @@ class Contact(models.Model):
     'contact model'
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
-    bio = models.TextField(max_length=240)
+    note = models.TextField(max_length=240)
     organization = models.CharField(max_length=40)
     title = models.CharField(max_length=10)
     photo = models.ImageField()
@@ -26,10 +26,33 @@ class Contact(models.Model):
 
 class ContactDetail(models.Model):
     'contact detail model'
-    detail_type = models.CharField()
-    value = models.CharField()
+    # detail type choices:
+    WORK = 'WK'
+    PHONE = 'PN'
+    HOME = 'HM'
+    FAX = 'FX'
+    EMAIL = 'EM'
+    ADDRESS = 'AD'
+    POSTAL_CODE = 'PC'
+    WEB_ADDRESS = 'WA'
+    EVENT = 'EV' #will also need type specification for itself
+    MESSENGER_ACCOUNT = 'MA'
+
+    DETAIL_TYPE_CHOICES = (
+        (WORK, 'Work Phone Number'),
+        (PHONE, 'Cell Phone Number'),
+        (HOME, 'Home Phone Number'),
+        (FAX, 'Fax Number'),
+        (ADDRESS, 'Address'), # Will need more chars than other items
+        (POSTAL_CODE, 'Zip/Postal Code'),
+        (WEB_ADDRESS, 'Website or Blog'),
+        (EVENT, 'Birthday, Anniversary, etc.'),
+        (MESSENGER_ACCOUNT, 'WhatsApp, Telegram, Messenger, etc.')
+    )
+    detail_type = models.CharField(max_length=2, choices=DETAIL_TYPE_CHOICES, default=PHONE)
+    value = models.CharField(max_length=200) # will need validation somehow
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
-    # tel,fax,mobile,pager,Email,postal code,Bio
+    
     def __str__(self):
         pass
         
