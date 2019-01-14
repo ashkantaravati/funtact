@@ -9,7 +9,7 @@ class ContactBook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        pass
+        return f'{self.user.username}-{self.label}'
 
 class Contact(models.Model):
     'contact model'
@@ -18,11 +18,11 @@ class Contact(models.Model):
     note = models.TextField(max_length=240)
     organization = models.CharField(max_length=40)
     title = models.CharField(max_length=10)
-    photo = models.ImageField()
+    photo = models.ImageField(upload_to='pics')
     contact_book = models.ForeignKey(ContactBook, on_delete=models.CASCADE)
 
     def __str__(self):
-        pass
+        return f'{self.first_name} {self.last_name}'
 
 class ContactDetail(models.Model):
     'contact detail model'
@@ -52,7 +52,7 @@ class ContactDetail(models.Model):
     detail_type = models.CharField(max_length=2, choices=DETAIL_TYPE_CHOICES, default=PHONE)
     value = models.CharField(max_length=200) # will need validation somehow
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
-    
+
     def __str__(self):
-        pass
+        return f"{self.contact.first_name}'s {self.get_detail_type_display()}"
         
